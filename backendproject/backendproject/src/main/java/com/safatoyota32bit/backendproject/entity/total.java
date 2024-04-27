@@ -29,8 +29,9 @@ public class total {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    @Column(name="discount")
-    private double discount;
+    @OneToOne
+    @JoinColumn(name="FKdiscountID")
+    private discount Discount;
 
     @OneToMany
     @JoinColumn(name = "FKsaleID")

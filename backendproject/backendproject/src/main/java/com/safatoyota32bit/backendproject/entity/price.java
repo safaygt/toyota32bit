@@ -22,7 +22,9 @@ public class price {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    private double discount;
+    @OneToOne
+    @JoinColumn(name = "FKdiscountID")
+    private discount Discount;
 
     @OneToMany
     @JoinColumn(name = "FKproductID")
