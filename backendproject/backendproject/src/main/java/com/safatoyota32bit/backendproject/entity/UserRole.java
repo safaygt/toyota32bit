@@ -10,12 +10,16 @@ import java.util.List;
 @Entity
 @Table (name="UserRole")
 @ToString
-
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = {"UserRoleID"})
 public class UserRole {
 
     @Id
-    @Column(name="UserRoleID")
+    @SequenceGenerator(name = "seq_UserRole", allocationSize = 1)
+    @GeneratedValue(generator = "seq_UserRole", strategy = GenerationType.SEQUENCE)
     private int UserRoleID;
 
     @OneToOne
@@ -25,6 +29,12 @@ public class UserRole {
     @OneToOne
     @JoinColumn(name = "FKroleID")
     private role Role;
+
+
+    @Setter
+    @Getter
+    private boolean deleted;
+
 
 
 }

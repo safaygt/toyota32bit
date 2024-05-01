@@ -10,10 +10,16 @@ import java.util.List;
 @Entity
 @Table (name="discount")
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = {"discountID"})
 public class discount {
 
     @Id
-    @Column(name = "discountID")
+    @SequenceGenerator(name = "seq_discount", allocationSize = 1)
+    @GeneratedValue(generator = "seq_discount", strategy = GenerationType.SEQUENCE)
     private int discountID;
 
     @Column(name="discountName")

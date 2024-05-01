@@ -10,11 +10,16 @@ import java.util.List;
 @Entity
 @Table (name="role")
 @ToString
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = {"roleID"})
 public class role {
 
     @Id
-    @Column(name="roleID")
+    @SequenceGenerator(name = "seq_role", allocationSize = 1)
+    @GeneratedValue(generator = "seq_role", strategy = GenerationType.SEQUENCE)
     private int roleID;
 
     @Column(name="roleName")

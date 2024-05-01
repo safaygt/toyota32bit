@@ -10,11 +10,17 @@ import java.util.List;
 
 @Entity
 @Table(name="user")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @ToString
+@EqualsAndHashCode(of = {"userID"})
 public class user {
 
     @Id
-    @Column(name = "userID")
+    @SequenceGenerator(name = "seq_user", allocationSize = 1)
+    @GeneratedValue(generator = "seq_user", strategy = GenerationType.SEQUENCE)
     private int userID;
 
     @Column(name="name")
@@ -22,5 +28,10 @@ public class user {
 
     @Column(name = "lastName")
     private String lastName;
+
+    @Setter
+    @Getter
+    private boolean deleted;
+
 
 }
