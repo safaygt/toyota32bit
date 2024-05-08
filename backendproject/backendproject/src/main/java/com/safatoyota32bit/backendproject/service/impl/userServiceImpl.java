@@ -73,14 +73,12 @@ public class userServiceImpl implements userService {
                     UserDTO.setUserID(item.getUserID());
                     UserDTO.setName(item.getName());
                     UserDTO.setLastName(item.getLastName());
-
-
-
+                    userDTOList.add(UserDTO);
                 }
 
         );
 
-        return null;
+        return userDTOList;
     }
 
     @Override

@@ -8,8 +8,5 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface productService {
-
-    public interface ProductService {
         List<productDTO> getAllProducts();
-    }
 }
