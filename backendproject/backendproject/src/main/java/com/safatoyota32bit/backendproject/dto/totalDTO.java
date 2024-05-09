@@ -12,10 +12,12 @@ public class totalDTO {
 
     private double change;
 
+    private double pay;
+
     private Date date;
 
-    private discountDTO discount;
+    private discountDTO DiscountDTO;
 
-    private saleDTO sale;
+    private saleDTO SaleDTO;
 
 }
