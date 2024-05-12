@@ -30,6 +30,14 @@ public class reportServiceImpl implements reportService {
 
 
 
+    @Override
+    public ByteArrayInputStream generateInvoice(int saleID) {
+
+        return null;
+
+    }
+
+
     private totalDTO convertToDTO(total Total) {
 
         totalDTO TotalDTO = new totalDTO();
