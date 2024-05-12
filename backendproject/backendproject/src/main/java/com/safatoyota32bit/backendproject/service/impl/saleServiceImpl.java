@@ -1,17 +1,8 @@
 package com.safatoyota32bit.backendproject.service.impl;
 
-import com.safatoyota32bit.backendproject.dto.discountDTO;
-import com.safatoyota32bit.backendproject.dto.productDTO;
-import com.safatoyota32bit.backendproject.dto.saleDTO;
-import com.safatoyota32bit.backendproject.dto.totalDTO;
-import com.safatoyota32bit.backendproject.entity.discount;
-import com.safatoyota32bit.backendproject.entity.product;
-import com.safatoyota32bit.backendproject.entity.sale;
-import com.safatoyota32bit.backendproject.entity.total;
-import com.safatoyota32bit.backendproject.repo.discountRepository;
-import com.safatoyota32bit.backendproject.repo.productRepository;
-import com.safatoyota32bit.backendproject.repo.saleRepository;
-import com.safatoyota32bit.backendproject.repo.totalRepository;
+import com.safatoyota32bit.backendproject.dto.*;
+import com.safatoyota32bit.backendproject.entity.*;
+import com.safatoyota32bit.backendproject.repo.*;
 import com.safatoyota32bit.backendproject.service.saleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +20,8 @@ public class saleServiceImpl implements saleService {
     private final totalRepository TotalRepository;
     private final discountRepository DiscountRepository;
     private final productRepository ProductRepository;
+    private final userRepository UserRepository;
+    private final salesTypeRepository SalesTypeRepository;
     @Override
     public void recordSale(saleDTO SaleDTO) {
 
@@ -49,8 +42,17 @@ public class saleServiceImpl implements saleService {
         total Total = new total();
         discountDTO DiscountDTO = TotalDTO.getDiscountDTO();
         discount Discount = DiscountRepository.findById(DiscountDTO.getDiscountID()).orElseThrow(() -> new RuntimeException("Discount not found: " + DiscountDTO.getDiscountName()));
-        saleDTO SaleDTO = TotalDTO.getSaleDTO();
-        sale Sale = SaleRepository.findById(SaleDTO.getSaleID()).orElseThrow(() -> new RuntimeException("Sale not found"));
+        List<sale> Sales = TotalDTO.getSaleDTO().stream()
+                .map(saleDTO -> {
+                    sale Sale = SaleRepository.findById(saleDTO.getSaleID())
+                            .orElseThrow(() -> new RuntimeException("Sale not found"));
+                    return Sale;
+                })
+                .collect(Collectors.toList());
+        userDTO UserDTO = TotalDTO.getUserDTO();
+        user User = UserRepository.findById(UserDTO.getUserID()).orElseThrow(() -> new RuntimeException("User not found: " + UserDTO.getUserID()));
+        salesTypeDTO SalesTypeDTO = TotalDTO.getSalesTypeDTO();
+        salestype SalesType = SalesTypeRepository.findById(SalesTypeDTO.getSalesTypeID()).orElseThrow(() -> new RuntimeException("Payment type not found: " + SalesTypeDTO.getSalesTypeID()));
 
 
         Total.setTotalPrice(TotalDTO.getTotalPrice());
@@ -58,7 +60,9 @@ public class saleServiceImpl implements saleService {
         Total.setPay(TotalDTO.getPay());
         Total.setDate(TotalDTO.getDate());
         Total.setDiscount(Discount);
-        Total.setSale(Sale);
+        Total.setSale(Sales);
+        Total.setUser(User);
+        Total.setSalesType(SalesType);
         TotalRepository.save(Total);
 
     }

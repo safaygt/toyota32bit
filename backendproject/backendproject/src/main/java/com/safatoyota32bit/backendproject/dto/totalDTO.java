@@ -3,6 +3,8 @@ package com.safatoyota32bit.backendproject.dto;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
+
 @Data
 public class totalDTO {
 
@@ -18,6 +20,10 @@ public class totalDTO {
 
     private discountDTO DiscountDTO;
 
-    private saleDTO SaleDTO;
+    private List<saleDTO> SaleDTO;
+
+    private userDTO UserDTO;
+
+    private salesTypeDTO SalesTypeDTO;
 
 }

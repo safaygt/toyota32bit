@@ -12,9 +12,9 @@ public class priceDTO {
 
     private Date date;
 
-    private discountDTO discount;
+    private discountDTO DiscountDTO;
 
-    private productDTO product;
+    private productDTO ProductDTO;
 
 
 }

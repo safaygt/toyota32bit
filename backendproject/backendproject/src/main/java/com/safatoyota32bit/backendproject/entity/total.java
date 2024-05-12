@@ -40,6 +40,13 @@ public class total {
 
     @OneToMany
     @JoinColumn(name = "FKsaleID")
-    private sale Sale;
+    private List<sale> Sale;
 
+    @ManyToOne
+    @JoinColumn(name= "FKuserID")
+    private user User;
+
+    @ManyToOne
+    @JoinColumn(name= "FKsaleTypeID")
+    private salestype SalesType;
 }
