@@ -1,6 +1,9 @@
 package com.safatoyota32bit.backendproject.service.impl;
 
 
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.properties.TextAlignment;
 import com.lowagie.text.PageSize;
 import com.safatoyota32bit.backendproject.dto.*;
 import com.safatoyota32bit.backendproject.entity.sale;
@@ -10,11 +13,19 @@ import com.safatoyota32bit.backendproject.service.reportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.Document;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.itextpdf.kernel.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.element.Paragraph;
+
+
+
 
 
 
@@ -31,9 +42,72 @@ public class reportServiceImpl implements reportService {
 
 
     @Override
-    public ByteArrayInputStream generateInvoice(int saleID) {
+    public ByteArrayInputStream generateInvoice(List<totalDTO> sales, int totalID) {
 
-        return null;
+        ByteArrayOutputStream OutputStream = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(OutputStream);
+        PdfDocument pdfDocument = new PdfDocument(writer);
+        Document document = new Document(pdfDocument);
+
+
+        try {
+            for (totalDTO sale : sales) {
+                if (sale.getID() == totalID) {
+
+                    Paragraph title = new Paragraph("Fatura").setFontSize(18)
+                            .setTextAlignment(TextAlignment.CENTER);
+                document.add(title);
+                document.add(new Paragraph("\n"));
+
+                    Paragraph saleInfo = new Paragraph()
+                            .add("Sale ID: "+sale.getID())
+                            .add("Date: "+ sale.getDate())
+                            .add("Total Price: " + sale.getTotalPrice())
+                            .add("Payment: " + sale.getPay())
+                            .add("Change: "+ sale.getChange())
+                            .add("Cashier: "+ sale.getUserDTO().getName() + " " +sale.getUserDTO().getLastName())
+                            .add("Payment Type: "+sale.getSalesTypeDTO().getSaleType())
+                            .setTextAlignment(TextAlignment.LEFT);
+                    document.add(saleInfo);
+
+
+
+                    Table table = new Table(new float[]{3,2,2})
+                            .setWidth(100)
+                            .setMarginTop(10f)
+                            .setMarginBottom(10f);
+
+
+                    table.addCell(new Cell().add(new Paragraph("Product").setBold()));
+                    table.addCell(new Cell().add(new Paragraph("Amount").setBold()));
+                    table.addCell(new Cell().add(new Paragraph("Price").setBold()));
+
+                    for (saleDTO item : sale.getSaleDTO()) {
+
+                        table.addCell(item.getProductDTO().getProductName());
+                        table.addCell(String.valueOf(item.getCount()));
+                        table.addCell(String.valueOf(item.getPriceDTO().getPrice()));
+                    }
+                document.add(table);
+                    break;
+
+
+                }
+
+            }
+
+
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
+            pdfDocument.close();
+        }
+
+
+
+        return new ByteArrayInputStream(OutputStream.toByteArray());
 
     }
 

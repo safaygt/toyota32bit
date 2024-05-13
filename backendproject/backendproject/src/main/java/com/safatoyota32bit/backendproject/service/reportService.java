@@ -9,6 +9,6 @@ import java.util.List;
 public interface reportService {
 
     List<totalDTO> getAllSales();
-    ByteArrayInputStream generateInvoice(int saleID);
+    ByteArrayInputStream generateInvoice(List<totalDTO> sales,int totalID);
 
 }
