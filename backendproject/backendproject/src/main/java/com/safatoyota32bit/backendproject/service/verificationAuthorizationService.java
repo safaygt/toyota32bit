@@ -5,12 +5,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface verificationAuthorizationService {
 
-    UserDetails loadUserByUserId(Long userId) throws UsernameNotFoundException;
-
-    String generateToken(UserDetails userDetails);
-
-    boolean validateToken(String token, UserDetails userDetails);
-
-    boolean hasPermission(UserDetails userDetails, String permission);
-
+    String generateToken(String userName);
+    boolean validateToken(String token);
+    boolean authorize(String token, String requiredRole);
 }
