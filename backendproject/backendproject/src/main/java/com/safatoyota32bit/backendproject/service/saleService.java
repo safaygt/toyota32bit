@@ -16,5 +16,5 @@ public interface saleService {
     void recordTotal(totalDTO TotalDTO);
 
     List<discountDTO> getAllDiscounts();
-
+    void addDiscount(discountDTO DiscountDTO);
 }

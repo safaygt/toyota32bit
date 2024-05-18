@@ -49,6 +49,9 @@ public class saleServiceImpl implements saleService {
                     return Sale;
                 })
                 .collect(Collectors.toList());
+
+
+
         userDTO UserDTO = TotalDTO.getUserDTO();
         user User = UserRepository.findById(UserDTO.getUserID()).orElseThrow(() -> new RuntimeException("User not found: " + UserDTO.getUserID()));
         salesTypeDTO SalesTypeDTO = TotalDTO.getSalesTypeDTO();
@@ -85,4 +88,14 @@ public class saleServiceImpl implements saleService {
 
        return discountDTOList;
     }
+
+    @Override
+    public void addDiscount(discountDTO DiscountDTO) {
+        discount Discount = new discount();
+        Discount.setDiscountID(DiscountDTO.getDiscountID());
+        Discount.setDiscountName(DiscountDTO.getDiscountName());
+        Discount.setDiscountPrice(DiscountDTO.getDiscountPrice());
+        DiscountRepository.save(Discount);
+    }
+
 }
