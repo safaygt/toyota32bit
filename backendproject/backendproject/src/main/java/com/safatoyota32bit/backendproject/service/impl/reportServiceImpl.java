@@ -11,6 +11,8 @@ import com.safatoyota32bit.backendproject.entity.total;
 import com.safatoyota32bit.backendproject.repo.*;
 import com.safatoyota32bit.backendproject.service.reportService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -191,6 +193,18 @@ public class reportServiceImpl implements reportService {
         return Total.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<totalDTO> getAllSales(Pageable pageable, String filter) {
+        Page<total> totals;
+
+        if (filter != null && !filter.isEmpty()) {
+            totals = TotalRepository.findByCriteria(filter, pageable);
+        } else {
+            totals = TotalRepository.findAll(pageable);
+        }
+
+        return totals.map(this::convertToDTO);
     }
 
 }
