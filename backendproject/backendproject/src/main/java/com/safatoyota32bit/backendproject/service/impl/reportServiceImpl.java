@@ -56,6 +56,10 @@ public class reportServiceImpl implements reportService {
             for (totalDTO sale : sales) {
                 if (sale.getID() == totalID) {
 
+
+                    double discountAmount = sale.getDiscountDTO().getDiscountPrice();
+                    double totalPriceAfterDiscount = sale.getTotalPrice() - discountAmount;
+
                     Paragraph title = new Paragraph("Fatura").setFontSize(18)
                             .setTextAlignment(TextAlignment.CENTER);
                 document.add(title);
@@ -64,7 +68,8 @@ public class reportServiceImpl implements reportService {
                     Paragraph saleInfo = new Paragraph()
                             .add("Sale ID: "+sale.getID())
                             .add("Date: "+ sale.getDate())
-                            .add("Total Price: " + sale.getTotalPrice())
+                            .add("Total Price: " + totalPriceAfterDiscount)
+                            .add("Discount: "+ discountAmount)
                             .add("Payment: " + sale.getPay())
                             .add("Change: "+ sale.getChange())
                             .add("Cashier: "+ sale.getUserDTO().getName() + " " +sale.getUserDTO().getLastName())
@@ -178,7 +183,7 @@ public class reportServiceImpl implements reportService {
         SaleDTO.setCount(Sale.getCount());
         SaleDTO.setSalesTypeDTO(SalesTypeDTO);
         SaleDTO.setProductDTO(ProductDTO);
-        // Diğer Sale alanlarını da doldurabilirsiniz
+
         return SaleDTO;
     }
 
