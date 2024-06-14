@@ -10,15 +10,19 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.Key;
 
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +36,22 @@ public class verificationAuthorizationServiceImpl implements verificationAuthori
     @Override
     public String generateToken(String userName) {
 
+        Optional<user> optionalUser = UserRepository.findByUsername(userName);
+        if (optionalUser.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        user User = optionalUser.get();
+        List<UserRole> userRoles = userRoleRepository.findByUser(User);
+
+        String roles = userRoles.stream()
+                .map(userRole -> userRole.getRole().getRoleName())
+                .collect(Collectors.joining(","));
+
+
+
         return Jwts.builder()
                 .claim("username", userName)
+                .claim("roles",roles)
                 .claim("issuer", "toyota32bit.com")
                 .claim("issuedAt",new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + validity))

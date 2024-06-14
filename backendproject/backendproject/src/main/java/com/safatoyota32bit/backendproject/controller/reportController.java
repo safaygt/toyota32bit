@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +27,7 @@ public class reportController {
 
     private final reportService ReportService;
 
-    @Secured("Role_Magaza_Muduru")
+    @PreAuthorize("hasRole('Role_Store_Manager')")
     @GetMapping("/sales")
     public ResponseEntity<Page<totalDTO>> getAllSales(Pageable pageable, @RequestParam(required = false) String filter){
         log.info("Fetching all sales with filter: {}", filter);
@@ -48,7 +49,7 @@ public class reportController {
 
     }
 
-    @Secured("Role_Magaza_Muduru")
+    @PreAuthorize("hasRole('Role_Store_Manager')")
     @GetMapping("/invoice/{totalID}")
     @ResponseBody
     public ResponseEntity<byte[]> generateInvoice(@PathVariable int totalID){

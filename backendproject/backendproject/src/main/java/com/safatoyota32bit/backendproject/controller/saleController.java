@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class saleController {
     private final saleService SaleService;
 
     @PostMapping("/record")
-    @Secured("Role_Cashier")
+    @PreAuthorize("hasRole('Role_Cashier')")
     public ResponseEntity<Void> recordSale(@RequestBody saleDTO SaleDTO){
         log.debug("Recording sale by cashier {}",SaleDTO.getSaleID());
 
@@ -41,7 +42,7 @@ public class saleController {
     }
 
     @PostMapping("/recordTotal")
-    @Secured("Role_Cashier")
+    @PreAuthorize("hasRole('Role_Cashier')")
     public ResponseEntity<Void> recordTotal(@RequestBody totalDTO TotalDTO) {
         log.info("Recording total by cashier {}",TotalDTO.getID());
 
@@ -56,7 +57,7 @@ public class saleController {
     }
 
     @GetMapping("/discounts")
-    @Secured("Role_Cashier")
+    @PreAuthorize("hasRole('Role_Cashier')")
     public ResponseEntity<List<discountDTO>> getAllDiscounts() {
 
         log.debug("Fetching all discounts by cashier");
@@ -73,7 +74,7 @@ public class saleController {
 
 
     @PostMapping("/addDiscount")
-    @Secured("Role_Cashier")
+    @PreAuthorize("hasRole('Role_Cashier')")
     public ResponseEntity<Void> addDiscount(@RequestBody discountDTO DiscountDTO) {
 
         log.debug("Adding discount by cashier: {}", DiscountDTO.getDiscountName());

@@ -4,6 +4,7 @@ import com.safatoyota32bit.backendproject.dto.userDTO;
 import com.safatoyota32bit.backendproject.service.userService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +17,7 @@ import java.util.List;
 public class userController {
 
     private final userService UserService;
+    @PreAuthorize("hasRole('Role_Admin')")
     @PostMapping
     public ResponseEntity<userDTO> createUser(@RequestBody userDTO UserDTO){
 
@@ -31,7 +33,7 @@ public class userController {
         }
 
     }
-
+    @PreAuthorize("hasRole('Role_Admin')")
     @PutMapping("/{userID}")
     public ResponseEntity<userDTO> updateUser(@PathVariable int userID, @RequestBody userDTO UserDTO){
         log.debug("Updating user with ID {}: {}", userID, UserDTO);
@@ -49,7 +51,7 @@ public class userController {
         }
 
     }
-
+    @PreAuthorize("hasRole('Role_Admin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id){
         log.debug("Soft deleting user with ID {}", id);
@@ -62,7 +64,7 @@ public class userController {
             return ResponseEntity.status(500).build();
         }
     }
-
+    @PreAuthorize("hasRole('Role_Admin')")
     @GetMapping
     public ResponseEntity<List<userDTO>> getAllUsers(){
         log.info("Fetching all users");
@@ -76,7 +78,7 @@ public class userController {
         }
 
     }
-
+    @PreAuthorize("hasRole('Role_Admin')")
     @PostMapping("/{userID}/roles/{roleID}")
     public ResponseEntity<Void> assignRole(@PathVariable int userID, @PathVariable int roleID){
 

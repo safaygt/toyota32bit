@@ -21,7 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.itextpdf.kernel.*;
+
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.element.Paragraph;
