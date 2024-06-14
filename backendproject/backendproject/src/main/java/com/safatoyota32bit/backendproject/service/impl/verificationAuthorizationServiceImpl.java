@@ -9,7 +9,7 @@ import com.safatoyota32bit.backendproject.service.verificationAuthorizationServi
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
-
+import com.safatoyota32bit.backendproject.util.JwtUtil;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
@@ -30,7 +30,7 @@ public class verificationAuthorizationServiceImpl implements verificationAuthori
 
     private final userRepository UserRepository;
     private final UserRoleRepository userRoleRepository;
-
+    private final JwtUtil jwtUtil;
     private static final String secretKey = "toyota32bit";
     private static final int validity = 5 * 60 * 1000;
     @Override
@@ -48,48 +48,29 @@ public class verificationAuthorizationServiceImpl implements verificationAuthori
                 .collect(Collectors.joining(","));
 
 
-
-        return Jwts.builder()
-                .claim("username", userName)
-                .claim("roles",roles)
-                .claim("issuer", "toyota32bit.com")
-                .claim("issuedAt",new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + validity))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-
+        return jwtUtil.generateToken(userName, roles);
 
     }
     @Override
     public boolean validateToken(String token) {
-        return getUserNameToken(token) != null && isExpired(token);
+        try {
+            Claims claims = jwtUtil.extractAllClaims(token);
+            return !claims.getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public boolean authorize(String token, String requiredRole) {
 
-        if (!validateToken(token)) {
-
+        try {
+            Claims claims = jwtUtil.extractAllClaims(token);
+            String roles = claims.get("roles", String.class);
+            return roles.contains(requiredRole);
+        } catch (Exception e) {
             return false;
         }
-
-        String name = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJwt(token).getBody().getSubject();
-        Optional<user> optionalUser = UserRepository.findByUsername(name);
-
-        if (optionalUser.isEmpty()){
-            return false;
-        }
-
-        user User = optionalUser.get();
-        List<UserRole> userRoles = userRoleRepository.findByUser(User);
-
-        for (UserRole userRole: userRoles) {
-            if(userRole.getRole().getRoleName().equals(requiredRole)){
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public boolean isExpired(String token){

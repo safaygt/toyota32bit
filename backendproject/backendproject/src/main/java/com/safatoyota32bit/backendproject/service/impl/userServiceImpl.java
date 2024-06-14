@@ -11,6 +11,7 @@ import com.safatoyota32bit.backendproject.service.userService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -134,6 +136,18 @@ public class userServiceImpl implements userService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        Optional<user> userOptional = UserRepository.findByUsername(username);
+        if (userOptional.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        user User = userOptional.get();
+        String UserName = User.getName() + User.getLastName();
+        List<UserRole> userRoles = userRoleRepository.findByUser(User);
+        List<SimpleGrantedAuthority> authorities = userRoles.stream()
+                .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getRoleName()))
+                .collect(Collectors.toList());
+        return new org.springframework.security.core.userdetails.User(UserName, "", authorities);
     }
+
 }
