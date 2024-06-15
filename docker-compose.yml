@@ -1,0 +1,85 @@
+version: "3.9"
+
+services:
+  mypostgres:
+    image: postgres
+    container_name: mypostgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: toyotadb
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+  product-service:
+    build:
+      context: ./backendproject/backendproject
+      dockerfile: Dockerfile
+    container_name: product-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/toyotadb    #burası ayarlanacak
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123123
+    depends_on:
+      - mypostgres
+
+
+  user-service:
+    build:
+      context: ./backendproject/backendproject
+      dockerfile: Dockerfile
+    container_name: user-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/toyotadb     #burası ayarlanacak
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123123
+    depends_on:
+      - mypostgres
+
+  report-service:
+    build:
+      context: ./backendproject/backendproject
+      dockerfile: Dockerfile
+    container_name: report-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/toyotadb     #burası ayarlanacak
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123123
+    depends_on:
+      - mypostgres
+
+
+
+
+  sale-service:
+    build:
+      context: ./backendproject/backendproject
+      dockerfile: Dockerfile
+    container_name: sale-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/toyotadb      #burası ayarlanacak
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123123
+    depends_on:
+      - mypostgres
+
+
+
+  verification-authorization-service:
+    build:
+      context: ./backendproject/backendproject
+      dockerfile: Dockerfile
+    container_name: verification-authorization-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/toyotadb     #burası ayarlanacak
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123123
+    depends_on:
+      - mypostgres
+
+
+volumes:
+  postgres_data:

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DatabaseToolSources">
+    <data-source name="localhost" uuid="0af79c53-e5c1-4b57-aa17-bd4e33803382" type="POSTGRES">
+      <base-info connect-type="DB_DEFAULT" product="PostgreSQL" version="16.2 (Debian 16.2-1.pgdg120+2)" major-version="16" minor-version="2" jdbc-name="PostgreSQL JDBC Driver" jdbc-version="42.6.0" jdbc-major-version="42" jdbc-minor-version="6" />
+      <user-name>postgres</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node negative="1">
+            <node kind="database" qname="postgres" use="false" operator="@">
+              <node kind="schema">
+                <name qname="public" />
+              </node>
+            </node>
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+      <url>jdbc:postgresql://localhost:5432/toyotadb</url>
+      <remarks />
+      <vm-options />
+      <driver-info id="postgresql" />
+      <ssh-properties enabled="false" />
+      <ssl-config enabled="false">
+        <uuid />
+        <caFile />
+        <clientCertificateFile />
+        <clientKeyFile />
+        <sslMode>REQUIRE</sslMode>
+      </ssl-config>
+    </data-source>
+  </component>
+</project>
