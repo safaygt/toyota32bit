@@ -29,9 +29,21 @@ public class user {
     @Column(name = "lastName")
     private String lastName;
 
+
+    @Column(name = "username", unique = true)
+    private String username;
+
+
     @Setter
     @Getter
     private boolean deleted;
+
+
+    @PrePersist
+    @PreUpdate
+    private void generateUsername() {
+        this.username = this.name.toLowerCase() + this.lastName.toLowerCase();
+    }
 
 
 }

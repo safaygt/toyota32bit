@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface UserRoleRepository extends JpaRepository <UserRole,Integer> {
 
-    @Query("SELECT ur FROM UserRole ur WHERE ur.fkUserID = :userID AND ur.deleted = false")
+    @Query("SELECT ur FROM UserRole ur WHERE ur.User.userID = :userID AND ur.deleted = false")
     List<UserRole> findByUserIDAndNotDeleted(@Param("userID") int userID);
 
-    List<UserRole> findByUser(user User);
+    List<UserRole> findByUser(user user);
 
 }

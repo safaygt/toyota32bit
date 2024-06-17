@@ -31,7 +31,7 @@ public class price {
     @JoinColumn(name = "FKdiscountID")
     private discount Discount;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "FKproductID")
     private product Product;
 
