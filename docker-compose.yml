@@ -22,6 +22,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://mypostgres:5432/toyotadb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123123
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       - mypostgres
 
@@ -34,6 +35,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://mypostgres:5432/toyotadb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123123
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       - mypostgres
 
@@ -46,6 +48,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://mypostgres:5432/toyotadb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123123
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       - mypostgres
 
@@ -58,6 +61,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://mypostgres:5432/toyotadb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123123
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       - mypostgres
 
@@ -70,6 +74,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://mypostgres:5432/toyotadb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 123123
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
     depends_on:
       - mypostgres
 

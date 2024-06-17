@@ -44,7 +44,7 @@ public class total {
 
     @ManyToOne
     @JoinColumn(name= "FKuserID")
-    private user User;
+    private users User;
 
     @ManyToOne
     @JoinColumn(name= "FKsaleTypeID")

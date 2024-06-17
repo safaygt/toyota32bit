@@ -1,8 +1,8 @@
 package com.safatoyota32bit.backendproject.service.impl;
 
 
-import com.safatoyota32bit.backendproject.entity.User;
 import com.safatoyota32bit.backendproject.entity.UserRole;
+import com.safatoyota32bit.backendproject.entity.users;
 import com.safatoyota32bit.backendproject.repo.UserRoleRepository;
 import com.safatoyota32bit.backendproject.repo.userRepository;
 import com.safatoyota32bit.backendproject.service.verificationAuthorizationService;
@@ -31,11 +31,11 @@ public class verificationAuthorizationServiceImpl implements verificationAuthori
     @Override
     public String generateToken(String userName) {
 
-        Optional<User> optionalUser = UserRepository.findByUsername(userName);
+        Optional<users> optionalUser = UserRepository.findByUsername(userName);
         if (optionalUser.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
-        User User = optionalUser.get();
+        users User = optionalUser.get();
         List<UserRole> userRoles = userRoleRepository.findByUser(User);
 
         String roles = userRoles.stream()

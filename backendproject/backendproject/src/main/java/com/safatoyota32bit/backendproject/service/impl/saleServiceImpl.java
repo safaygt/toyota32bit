@@ -53,7 +53,7 @@ public class saleServiceImpl implements saleService {
 
 
         userDTO UserDTO = TotalDTO.getUserDTO();
-        user User = UserRepository.findById(UserDTO.getUserID()).orElseThrow(() -> new RuntimeException("User not found: " + UserDTO.getUserID()));
+        users User = UserRepository.findById(UserDTO.getUserID()).orElseThrow(() -> new RuntimeException("User not found: " + UserDTO.getUserID()));
         salesTypeDTO SalesTypeDTO = TotalDTO.getSalesTypeDTO();
         salestype SalesType = SalesTypeRepository.findById(SalesTypeDTO.getSalesTypeID()).orElseThrow(() -> new RuntimeException("Payment type not found: " + SalesTypeDTO.getSalesTypeID()));
 

@@ -1,9 +1,9 @@
 package com.safatoyota32bit.backendproject.service.impl;
 
 import com.safatoyota32bit.backendproject.dto.userDTO;
-import com.safatoyota32bit.backendproject.entity.User;
 import com.safatoyota32bit.backendproject.entity.UserRole;
 import com.safatoyota32bit.backendproject.entity.role;
+import com.safatoyota32bit.backendproject.entity.users;
 import com.safatoyota32bit.backendproject.repo.UserRoleRepository;
 import com.safatoyota32bit.backendproject.repo.roleRepository;
 import com.safatoyota32bit.backendproject.repo.userRepository;
@@ -34,10 +34,10 @@ public class userServiceImpl implements userService {
     @Transactional
     public userDTO save(userDTO UserDTO) {
 
-        User User = new User();
+        users User = new users();
         User.setName(UserDTO.getName());
         User.setLastName(UserDTO.getLastName());
-        final User UserDB = UserRepository.save(User);
+        final users UserDB = UserRepository.save(User);
         UserDTO.setUserID(UserDB.getUserID());
 
         return UserDTO;
@@ -46,7 +46,7 @@ public class userServiceImpl implements userService {
     @Override
     public void softDelete(int userID) {
 
-    Optional<User> userOptional = UserRepository.findById(userID);
+    Optional<users> userOptional = UserRepository.findById(userID);
     userOptional.ifPresent(user -> {
 
         user.setDeleted(true);
@@ -65,7 +65,7 @@ public class userServiceImpl implements userService {
     @Override
     public List<userDTO> getAll() {
 
-        List<User> usersList = UserRepository.findAll();
+        List<users> usersList = UserRepository.findAll();
         List<userDTO> userDTOList = new ArrayList<>();
         usersList.forEach(item ->
                 {
@@ -88,11 +88,11 @@ public class userServiceImpl implements userService {
 
     @Override
     public void assignRole(int userId, int roleId) {
-        Optional<User> userOptional = UserRepository.findById(userId);
+        Optional<users> userOptional = UserRepository.findById(userId);
         Optional<role> roleOptional = RoleRepository.findById(roleId);
 
         if (userOptional.isPresent() && roleOptional.isPresent()) {
-            User User = userOptional.get();
+            users User = userOptional.get();
             role Role = roleOptional.get();
 
 
@@ -109,9 +109,9 @@ public class userServiceImpl implements userService {
 
     @Override
     public userDTO update(userDTO UserDTO) {
-        Optional<User> userOptional = UserRepository.findById(UserDTO.getUserID());
+        Optional<users> userOptional = UserRepository.findById(UserDTO.getUserID());
         if(userOptional.isPresent()){
-            User existingUser = userOptional.get();
+            users existingUser = userOptional.get();
             existingUser.setName(UserDTO.getName());
             existingUser.setLastName(UserDTO.getLastName());
             UserRepository.save(existingUser);
@@ -123,7 +123,7 @@ public class userServiceImpl implements userService {
 
     }
 
-    private userDTO convertToDTO(User userEntity) {
+    private userDTO convertToDTO(users userEntity) {
         userDTO UserDTO = new userDTO();
         UserDTO.setUserID(userEntity.getUserID());
         UserDTO.setName(userEntity.getName());
@@ -134,12 +134,12 @@ public class userServiceImpl implements userService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = UserRepository.findByUsername(username);
+        Optional<users> userOptional = UserRepository.findByUsername(username);
         if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        User user = userOptional.get();
+        users user = userOptional.get();
         String UserName = user.getName() + user.getLastName();
         List<UserRole> userRoles = userRoleRepository.findByUser(user);
         List<SimpleGrantedAuthority> authorities = userRoles.stream()

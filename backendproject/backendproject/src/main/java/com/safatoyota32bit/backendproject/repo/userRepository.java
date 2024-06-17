@@ -1,13 +1,13 @@
 package com.safatoyota32bit.backendproject.repo;
 
-import com.safatoyota32bit.backendproject.entity.User;
+import com.safatoyota32bit.backendproject.entity.users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface userRepository extends JpaRepository <User,Integer> {
+public interface userRepository extends JpaRepository <users,Integer> {
 
-    Optional<User> findByUsername(String username);
+    Optional<users> findByUsername(String username);
 
 }
 

@@ -1,23 +1,20 @@
 package com.safatoyota32bit.backendproject.entity;
-
 import jakarta.persistence.*;
 import lombok.*;
 
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode(of = {"userID"})
-
-public class User {
-
+public class users {
     @Id
-    @SequenceGenerator(name = "seq_user", allocationSize = 1)
-    @GeneratedValue(generator = "seq_user", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "seq_users", allocationSize = 1)
+    @GeneratedValue(generator = "seq_users", strategy = GenerationType.SEQUENCE)
     private int userID;
 
     @Column(name="name")
@@ -41,5 +38,6 @@ public class User {
     private void generateUsername() {
         this.username = this.name.toLowerCase() + this.lastName.toLowerCase();
     }
+
 
 }

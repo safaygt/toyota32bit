@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface totalRepository extends JpaRepository <total,Integer> {
 
-    @Query("SELECT t FROM total t WHERE "
-            + "LOWER(t.user.name) LIKE LOWER(CONCAT('%', :filter, '%')) OR "
-            + "LOWER(t.user.lastName) LIKE LOWER(CONCAT('%', :filter, '%')) OR "
-            + "LOWER(t.salesType.saleType) LIKE LOWER(CONCAT('%', :filter, '%'))")
+    @Query("SELECT t FROM total t JOIN t.User u JOIN t.SalesType s WHERE  "
+            + "LOWER(u.name) LIKE LOWER(CONCAT('%', :filter, '%')) OR "
+            + "LOWER(u.lastName) LIKE LOWER(CONCAT('%', :filter, '%')) OR "
+            + "LOWER(s.saleType) LIKE LOWER(CONCAT('%', :filter, '%'))")
     Page<total> findByCriteria(String filter, Pageable pageable);
 
 }
