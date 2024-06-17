@@ -1,18 +1,16 @@
 package com.safatoyota32bit.backendproject.service.impl;
 
 import com.safatoyota32bit.backendproject.dto.userDTO;
+import com.safatoyota32bit.backendproject.entity.User;
 import com.safatoyota32bit.backendproject.entity.UserRole;
 import com.safatoyota32bit.backendproject.entity.role;
-import com.safatoyota32bit.backendproject.entity.user;
 import com.safatoyota32bit.backendproject.repo.UserRoleRepository;
 import com.safatoyota32bit.backendproject.repo.roleRepository;
 import com.safatoyota32bit.backendproject.repo.userRepository;
 import com.safatoyota32bit.backendproject.service.userService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +34,10 @@ public class userServiceImpl implements userService {
     @Transactional
     public userDTO save(userDTO UserDTO) {
 
-        user User = new user();
+        User User = new User();
         User.setName(UserDTO.getName());
         User.setLastName(UserDTO.getLastName());
-        final user UserDB = UserRepository.save(User);
+        final User UserDB = UserRepository.save(User);
         UserDTO.setUserID(UserDB.getUserID());
 
         return UserDTO;
@@ -48,7 +46,7 @@ public class userServiceImpl implements userService {
     @Override
     public void softDelete(int userID) {
 
-    Optional<user> userOptional = UserRepository.findById(userID);
+    Optional<User> userOptional = UserRepository.findById(userID);
     userOptional.ifPresent(user -> {
 
         user.setDeleted(true);
@@ -67,7 +65,7 @@ public class userServiceImpl implements userService {
     @Override
     public List<userDTO> getAll() {
 
-        List<user> usersList = UserRepository.findAll();
+        List<User> usersList = UserRepository.findAll();
         List<userDTO> userDTOList = new ArrayList<>();
         usersList.forEach(item ->
                 {
@@ -90,11 +88,11 @@ public class userServiceImpl implements userService {
 
     @Override
     public void assignRole(int userId, int roleId) {
-        Optional<user> userOptional = UserRepository.findById(userId);
+        Optional<User> userOptional = UserRepository.findById(userId);
         Optional<role> roleOptional = RoleRepository.findById(roleId);
 
         if (userOptional.isPresent() && roleOptional.isPresent()) {
-            user User = userOptional.get();
+            User User = userOptional.get();
             role Role = roleOptional.get();
 
 
@@ -111,9 +109,9 @@ public class userServiceImpl implements userService {
 
     @Override
     public userDTO update(userDTO UserDTO) {
-        Optional<user> userOptional = UserRepository.findById(UserDTO.getUserID());
+        Optional<User> userOptional = UserRepository.findById(UserDTO.getUserID());
         if(userOptional.isPresent()){
-            user existingUser = userOptional.get();
+            User existingUser = userOptional.get();
             existingUser.setName(UserDTO.getName());
             existingUser.setLastName(UserDTO.getLastName());
             UserRepository.save(existingUser);
@@ -125,7 +123,7 @@ public class userServiceImpl implements userService {
 
     }
 
-    private userDTO convertToDTO(user userEntity) {
+    private userDTO convertToDTO(User userEntity) {
         userDTO UserDTO = new userDTO();
         UserDTO.setUserID(userEntity.getUserID());
         UserDTO.setName(userEntity.getName());
@@ -136,14 +134,14 @@ public class userServiceImpl implements userService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<user> userOptional = UserRepository.findByUsername(username);
+        Optional<User> userOptional = UserRepository.findByUsername(username);
         if (userOptional.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
 
-        user User = userOptional.get();
-        String UserName = User.getName() + User.getLastName();
-        List<UserRole> userRoles = userRoleRepository.findByUser(User);
+        User user = userOptional.get();
+        String UserName = user.getName() + user.getLastName();
+        List<UserRole> userRoles = userRoleRepository.findByUser(user);
         List<SimpleGrantedAuthority> authorities = userRoles.stream()
                 .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getRoleName()))
                 .collect(Collectors.toList());

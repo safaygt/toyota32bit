@@ -2,10 +2,7 @@ package com.safatoyota32bit.backendproject.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table (name="UserRole")
@@ -24,7 +21,7 @@ public class UserRole {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FKuserID")
-    private user User;
+    private User User;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FKroleID")

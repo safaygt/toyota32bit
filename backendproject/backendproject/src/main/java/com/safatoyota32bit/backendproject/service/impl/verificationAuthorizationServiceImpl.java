@@ -2,21 +2,15 @@ package com.safatoyota32bit.backendproject.service.impl;
 
 
 import com.safatoyota32bit.backendproject.entity.UserRole;
-import com.safatoyota32bit.backendproject.entity.user;
 import com.safatoyota32bit.backendproject.repo.UserRoleRepository;
 import com.safatoyota32bit.backendproject.repo.userRepository;
 import com.safatoyota32bit.backendproject.service.verificationAuthorizationService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import com.safatoyota32bit.backendproject.util.JwtUtil;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-
-import java.nio.file.attribute.UserPrincipalNotFoundException;
-import java.security.Key;
 
 
 import java.util.Date;
