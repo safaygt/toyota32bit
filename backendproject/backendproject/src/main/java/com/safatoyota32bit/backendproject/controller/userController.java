@@ -2,6 +2,7 @@ package com.safatoyota32bit.backendproject.controller;
 
 import com.safatoyota32bit.backendproject.dto.userDTO;
 import com.safatoyota32bit.backendproject.service.userService;
+import com.safatoyota32bit.backendproject.service.verificationAuthorizationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.log4j.Log4j2;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,24 +19,63 @@ import java.util.List;
 public class userController {
 
     private final userService UserService;
-    @PreAuthorize("hasRole('Role_Admin')")
-    @PostMapping
-    public ResponseEntity<userDTO> createUser(@RequestBody userDTO UserDTO){
+    private final verificationAuthorizationService VerifyAuthService;
+    @PostMapping("/create")
+    public ResponseEntity<userDTO> createUser(@RequestBody userDTO userDTO) {
+        log.debug("Creating user: {}", userDTO.getUserID());
 
-        log.debug("Creating user: {}", UserDTO.getUserID());
-        userDTO createdUser;
-        try {
-            createdUser = UserService.save(UserDTO);
-            log.info("User created successfully");
-            return ResponseEntity.ok(createdUser);
-        } catch (Exception e){
-            log.error("Error occured while creating user ", e  );
-            return ResponseEntity.status(500).build();
+        if (UserService.isUserValid(userDTO.getUsername())) {
+            log.error("Username {} already exists", userDTO.getUsername());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
 
+        try {
+            userDTO createdUser = UserService.save(userDTO);
+            log.info("User created successfully");
+            return ResponseEntity.ok(createdUser);
+        } catch (Exception e) {
+            log.error("Error occurred while creating user", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestParam String username) {
+        log.debug("Logging in user with username: {}", username);
+        try {
+            if (!UserService.isUserValid(username)) {
+                log.error("Invalid username: {}", username);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid username");
+            }
+
+            String token = VerifyAuthService.generateToken(username);
+            log.info("User logged in successfully with token");
+            return ResponseEntity.ok(token);
+        } catch (Exception e) {
+            log.error("Error occurred while logging in user", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while logging in");
+        }
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<?> authenticate(@RequestBody userDTO UserDTO){
+        try {
+
+            boolean isUserValid = UserService.isUserValid(UserDTO.getUsername());
+            if (!isUserValid) {
+                return ResponseEntity.status(403).body("Invalid credentials");
+            }
+            final String token = VerifyAuthService.generateToken(UserDTO.getUsername());
+            return ResponseEntity.ok(token);
+        } catch (Exception e) {
+            return ResponseEntity.status(403).body("Invalid credentials");
+        }
+    }
+
+
+
     @PreAuthorize("hasRole('Role_Admin')")
-    @PutMapping("/{userID}")
+    @PutMapping("/update/{userID}")
     public ResponseEntity<userDTO> updateUser(@PathVariable int userID, @RequestBody userDTO UserDTO){
         log.debug("Updating user with ID {}: {}", userID, UserDTO);
         UserDTO.setUserID(userID);
@@ -52,7 +93,7 @@ public class userController {
 
     }
     @PreAuthorize("hasRole('Role_Admin')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id){
         log.debug("Soft deleting user with ID {}", id);
         try {

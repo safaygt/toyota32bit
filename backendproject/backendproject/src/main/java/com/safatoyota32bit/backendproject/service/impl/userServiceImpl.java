@@ -148,4 +148,10 @@ public class userServiceImpl implements userService {
         return new org.springframework.security.core.userdetails.User(UserName, "", authorities);
     }
 
+
+    @Override
+    public boolean isUserValid(String username) {
+        return UserRepository.findByUsername(username).isPresent();
+    }
+
 }

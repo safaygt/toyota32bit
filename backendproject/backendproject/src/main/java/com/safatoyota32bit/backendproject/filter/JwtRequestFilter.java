@@ -25,7 +25,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final userService userService;
-    @Value("${jwt.header}")
+    @Value("${jwt.header:Authorization}")
     private String header;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)

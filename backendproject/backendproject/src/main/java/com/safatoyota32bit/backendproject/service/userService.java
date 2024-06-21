@@ -20,4 +20,6 @@ public interface userService extends UserDetailsService {
 
     userDTO update(userDTO UserDTO);
 
+    boolean isUserValid(String username);
+
 }
