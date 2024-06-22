@@ -26,11 +26,8 @@ public class verificationAuthorizationServiceImpl implements verificationAuthori
     private final userRepository UserRepository;
     private final UserRoleRepository userRoleRepository;
     private final JwtUtil jwtUtil;
-    private static final String secretKey = "toyota32bit";
-    private static final int validity = 5 * 60 * 1000;
     @Override
     public String generateToken(String userName) {
-
         Optional<users> optionalUser = UserRepository.findByUsername(userName);
         if (optionalUser.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
@@ -42,10 +39,10 @@ public class verificationAuthorizationServiceImpl implements verificationAuthori
                 .map(userRole -> userRole.getRole().getRoleName())
                 .collect(Collectors.joining(","));
 
-
         return jwtUtil.generateToken(userName, roles);
-
     }
+
+
     @Override
     public boolean validateToken(String token) {
         try {
@@ -58,7 +55,6 @@ public class verificationAuthorizationServiceImpl implements verificationAuthori
 
     @Override
     public boolean authorize(String token, String requiredRole) {
-
         try {
             Claims claims = jwtUtil.extractAllClaims(token);
             String roles = claims.get("roles", String.class);
@@ -66,19 +62,5 @@ public class verificationAuthorizationServiceImpl implements verificationAuthori
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public boolean isExpired(String token){
-        Claims claims = getClaims(token);
-        return claims.getExpiration().before(new Date(System.currentTimeMillis()));
-    }
-
-    public String getUserNameToken(String token){
-        Claims claims = getClaims(token);
-        return claims.getSubject();
-    }
-
-    public Claims getClaims(String token) {
-        return Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
     }
 }
