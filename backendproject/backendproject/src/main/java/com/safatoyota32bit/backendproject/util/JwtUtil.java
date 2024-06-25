@@ -1,10 +1,9 @@
 package com.safatoyota32bit.backendproject.util;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -13,13 +12,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static io.jsonwebtoken.security.Keys.secretKeyFor;
-
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secret;
+
+
+    private final Key key;
+
+    public JwtUtil() {
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    }
+
 
     // Method to extract username from JWT token
     public String extractUsername(String token) {
@@ -34,7 +37,7 @@ public class JwtUtil {
 
     // Method to extract all claims from JWT token
     public Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secret).build().parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
     // Method to check if the token is expired
@@ -56,13 +59,8 @@ public class JwtUtil {
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
-                .signWith(SignatureAlgorithm.HS256, secretKeyFor(SignatureAlgorithm.HS256))
+                .signWith(key)
                 .compact();
-    }
-
-
-    private static Key secretKeyFor(SignatureAlgorithm signatureAlgorithm) {
-        return Keys.secretKeyFor(signatureAlgorithm);
     }
 
     // Method to validate JWT token
@@ -70,5 +68,4 @@ public class JwtUtil {
         final String extractedUsername = extractUsername(token);
         return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
-
 }

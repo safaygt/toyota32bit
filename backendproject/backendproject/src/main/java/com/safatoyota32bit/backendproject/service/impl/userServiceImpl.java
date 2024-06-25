@@ -30,6 +30,10 @@ public class userServiceImpl implements userService {
     private final roleRepository RoleRepository;
     private final UserRoleRepository userRoleRepository;
 
+
+
+
+
     @Override
     @Transactional
     public userDTO save(userDTO UserDTO) {
@@ -136,8 +140,9 @@ public class userServiceImpl implements userService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<users> userOptional = UserRepository.findByUsername(username);
         if (userOptional.isEmpty()) {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
+
 
         users user = userOptional.get();
         String UserName = user.getName() + user.getLastName();
@@ -146,6 +151,13 @@ public class userServiceImpl implements userService {
                 .map(userRole -> new SimpleGrantedAuthority(userRole.getRole().getRoleName()))
                 .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(UserName, "", authorities);
+    }
+
+
+
+    public users findByUsername(String username) {
+        Optional<users> userOptional = UserRepository.findByUsername(username);
+        return userOptional.orElse(null);
     }
 
 

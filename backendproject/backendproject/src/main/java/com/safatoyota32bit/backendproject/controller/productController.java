@@ -8,8 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/product")
 @Log4j2
-
 public class productController {
 
     private final productService ProductService;

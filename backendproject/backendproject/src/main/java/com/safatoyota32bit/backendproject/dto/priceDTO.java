@@ -3,7 +3,7 @@ package com.safatoyota32bit.backendproject.dto;
 import java.util.Date;
 import lombok.Data;
 
-import java.util.List;
+
 @Data
 public class priceDTO {
 

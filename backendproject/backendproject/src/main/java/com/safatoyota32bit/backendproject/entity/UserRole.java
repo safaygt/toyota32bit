@@ -19,11 +19,11 @@ public class UserRole {
     @GeneratedValue(generator = "seq_UserRole", strategy = GenerationType.SEQUENCE)
     private int UserRoleID;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "FKuserID")
     private users user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "FKroleID")
     private role Role;
 

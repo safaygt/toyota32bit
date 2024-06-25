@@ -4,7 +4,6 @@ package com.safatoyota32bit.backendproject.service.impl;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.properties.TextAlignment;
-import com.lowagie.text.PageSize;
 import com.safatoyota32bit.backendproject.dto.*;
 import com.safatoyota32bit.backendproject.entity.sale;
 import com.safatoyota32bit.backendproject.entity.total;

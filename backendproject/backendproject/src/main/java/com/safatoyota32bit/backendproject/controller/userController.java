@@ -6,7 +6,6 @@ import com.safatoyota32bit.backendproject.service.verificationAuthorizationServi
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.log4j.Log4j2;
 import java.util.List;

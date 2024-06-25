@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import com.safatoyota32bit.backendproject.util.JwtUtil;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Jwts;
 
 
 import java.util.Date;

@@ -2,17 +2,14 @@ package com.safatoyota32bit.backendproject.config;
 import com.safatoyota32bit.backendproject.filter.JwtRequestFilter;
 import com.safatoyota32bit.backendproject.service.userService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -37,12 +34,12 @@ public class SecurityConfig{
                         .requestMatchers("/user/create").permitAll()
                         .requestMatchers("/user/authenticate").permitAll()
                         .requestMatchers("/user/login").permitAll()
-                        .requestMatchers("/sales/**").hasRole("Role_Cashier")
-                        .requestMatchers("/user/delete/{id}").hasRole("Role_Admin")
-                        .requestMatchers("/user/update/{userID}").hasRole("Role_Admin")
-                        .requestMatchers("/user").hasRole("Role_Admin")
-                        .requestMatchers("/{userID}/roles/{roleID}").hasRole("Role_Admin")
-                        .requestMatchers("/report/**").hasRole("Role_Store_Manager")
+                        .requestMatchers("/sales/**").hasAnyAuthority("Role_Cashier")
+                        .requestMatchers("/user/delete/{id}").hasAnyAuthority("Role_Admin")
+                        .requestMatchers("/user/update/{userID}").hasAnyAuthority("Role_Admin")
+                        .requestMatchers("/user").hasAnyAuthority("Role_Admin")
+                        .requestMatchers("/{userID}/roles/{roleID}").hasAnyAuthority("Role_Admin")
+                        .requestMatchers("/report/**").hasAnyAuthority("Role_Store_Manager")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
