@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class userServiceImpl implements userService {
+public class userServiceImpl implements userService, UserDetailsService {
 
     private final userRepository UserRepository;
     private final roleRepository RoleRepository;
@@ -77,6 +78,7 @@ public class userServiceImpl implements userService {
                     UserDTO.setUserID(item.getUserID());
                     UserDTO.setName(item.getName());
                     UserDTO.setLastName(item.getLastName());
+                    UserDTO.setUsername(item.getUsername());
                     userDTOList.add(UserDTO);
                 }
 
@@ -118,6 +120,7 @@ public class userServiceImpl implements userService {
             users existingUser = userOptional.get();
             existingUser.setName(UserDTO.getName());
             existingUser.setLastName(UserDTO.getLastName());
+            existingUser.setUsername(UserDTO.getUsername());
             UserRepository.save(existingUser);
             return convertToDTO(existingUser);
         }else {
@@ -132,6 +135,7 @@ public class userServiceImpl implements userService {
         UserDTO.setUserID(userEntity.getUserID());
         UserDTO.setName(userEntity.getName());
         UserDTO.setLastName(userEntity.getLastName());
+        UserDTO.setUsername(userEntity.getUsername());
 
         return UserDTO;
     }
@@ -152,8 +156,6 @@ public class userServiceImpl implements userService {
                 .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(UserName, "", authorities);
     }
-
-
 
     public users findByUsername(String username) {
         Optional<users> userOptional = UserRepository.findByUsername(username);
